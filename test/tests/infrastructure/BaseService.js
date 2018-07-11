@@ -2,9 +2,9 @@ import { BaseService } from '../../../src/infrastructure';
 
 describe('Creation of BaseService instance', () => {
   test('If a token or oauthToken is not passed, throw an error', async () => {
-    expect(() => {
+    let error = expect(() => {
       const service = new BaseService(); // eslint-disable-line no-unused-vars
-    }).toThrowError('`token` (private-token) or `oauth_token` is mandatory');
+    }).toThrow('`token` (private-token) or `oauth_token` is mandatory');
   });
 
   test('Url defaults to https://gitlab.com/api/v4', async () => {
@@ -36,5 +36,11 @@ describe('Creation of BaseService instance', () => {
     const service = new BaseService({ url: 'https://testing.com', token: '1234' });
 
     expect(service.headers['private-token']).toBe('1234');
+  });
+
+  test('Api version should be modified', async () => {
+    const service = new BaseService({ url: 'https://testing.com', token: '1234',version:'v3' });
+
+    expect(service.url).toBe('https://testing.com/api/v3');
   });
 });
